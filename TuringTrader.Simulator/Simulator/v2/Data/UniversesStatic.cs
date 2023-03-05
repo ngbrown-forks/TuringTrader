@@ -320,7 +320,7 @@ namespace TuringTrader.SimulatorV2
             "FITB",  // 285 Fifth Third Bancorp FITB
             "WY",    // 286 Weyerhaeuser Company    WY
             "ULTA",  // 287 Ulta Beauty Inc.    ULTA
-            "AVG",   // 288 AvalonBay Communities Inc.  AVB
+            "AVB",   // 288 AvalonBay Communities Inc.  AVB
             "VMC",   // 289 Vulcan Materials Company    VMC
             "FTV",   // 290 Fortive Corp.   FTV 0.069955       67.73    0.18    (0.26%)
             "EFX",   // 291 Equifax Inc.    EFX
@@ -509,7 +509,7 @@ namespace TuringTrader.SimulatorV2
             "SBNY",  // 474 Signature Bank  SBNY
             "IVZ",   // 475 Invesco Ltd.    IVZ
             "RHI",   // 476 Robert Half International Inc.  RHI
-            "FBHS",  // 477 Fortune Brands Home & Security Inc. FBHS
+            "FBIN",  // 477 Fortune Brands Home & Security Inc. FBHS, renamed Fortune Brands Innovations, Inc. FBIN
             "HAS",   // 478 Hasbro Inc. HAS
             "WHR",   // 479 Whirlpool Corporation   WHR
             "SEE",   // 480 Sealed Air Corporation  SEE
