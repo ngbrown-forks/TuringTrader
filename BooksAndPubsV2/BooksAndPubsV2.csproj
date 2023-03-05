@@ -16,18 +16,6 @@
     <RootNamespace>TuringTrader.BooksAndPubsV2</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy $(TargetPath) ..\Algorithms\$(TargetFileName)" />
-  </Target>
-
   <ItemGroup>
     <ProjectReference Include="..\TuringTrader.Simulator\TuringTrader.Simulator.csproj" />
   </ItemGroup>
