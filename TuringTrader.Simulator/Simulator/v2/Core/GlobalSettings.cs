@@ -22,6 +22,8 @@
 //==============================================================================
 
 #region Libraries
+
+using System;
 using Microsoft.Win32;
 using System.Collections.Generic;
 using System.IO;
@@ -178,7 +180,7 @@ namespace TuringTrader.SimulatorV2
         {
             get
             {
-                return Path.Combine(HomePath, "Algorithms");
+                return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             }
         }
         #endregion

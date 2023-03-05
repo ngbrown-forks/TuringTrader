@@ -170,11 +170,25 @@ namespace TuringTrader.Simulator
                     yield break;
 
                 FileInfo[] files = dirInfo.GetFiles("*.dll");
+                var ignoredFileNames = new[]
+                {
+                    "ExcelApi.dll", "OfficeApi.dll", "OxyPlot.dll", "WpfContrib.dll",
+                };
+                var ignoredFilePrefixes = new[]
+                {
+                    "Microsoft.", "MathNet.", "Newtonsoft.", "System.",
+                };
 
                 // see https://msdn.microsoft.com/en-us/library/ms972968.aspx
 
                 foreach (FileInfo file in files)
                 {
+                    if (ignoredFileNames.Any(f => f.Equals(file.Name, StringComparison.OrdinalIgnoreCase)) ||
+                        ignoredFilePrefixes.Any(f => f.StartsWith(file.Name, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
+
                     Assembly assembly = null;
 
                     try

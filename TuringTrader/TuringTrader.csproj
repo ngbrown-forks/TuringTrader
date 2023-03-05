@@ -30,6 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BooksAndPubsV2\BooksAndPubsV2.csproj" />
+    <ProjectReference Include="..\BooksAndPubs\BooksAndPubs.csproj" />
     <ProjectReference Include="..\TuringTrader.Simulator\TuringTrader.Simulator.csproj" />
   </ItemGroup>
 
