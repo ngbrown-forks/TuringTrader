@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BooksAndPubsV2\BooksAndPubsV2.csproj" />
     <ProjectReference Include="..\BooksAndPubs\BooksAndPubs.csproj" />
+    <ProjectReference Include="..\ngbrown.TradingAlgorithms\ngbrown.TradingAlgorithms.csproj" />
     <ProjectReference Include="..\TuringTrader.Simulator\TuringTrader.Simulator.csproj" />
   </ItemGroup>
 

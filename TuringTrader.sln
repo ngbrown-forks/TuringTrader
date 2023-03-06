@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "More", "More", "{0594F683-F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooksAndPubsV2", "BooksAndPubsV2\BooksAndPubsV2.csproj", "{FEA0D82C-2AEB-4CEA-B2B7-4FA6B465B4A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ngbrown.TradingAlgorithms", "ngbrown.TradingAlgorithms\ngbrown.TradingAlgorithms.csproj", "{10E8EC80-B9A4-4F09-89AB-AA38F2D5545E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -54,6 +56,10 @@ Global
 		{FEA0D82C-2AEB-4CEA-B2B7-4FA6B465B4A1}.Debug|x64.Build.0 = Debug|x64
 		{FEA0D82C-2AEB-4CEA-B2B7-4FA6B465B4A1}.Release|x64.ActiveCfg = Release|x64
 		{FEA0D82C-2AEB-4CEA-B2B7-4FA6B465B4A1}.Release|x64.Build.0 = Release|x64
+		{10E8EC80-B9A4-4F09-89AB-AA38F2D5545E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{10E8EC80-B9A4-4F09-89AB-AA38F2D5545E}.Debug|x64.Build.0 = Debug|Any CPU
+		{10E8EC80-B9A4-4F09-89AB-AA38F2D5545E}.Release|x64.ActiveCfg = Release|Any CPU
+		{10E8EC80-B9A4-4F09-89AB-AA38F2D5545E}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

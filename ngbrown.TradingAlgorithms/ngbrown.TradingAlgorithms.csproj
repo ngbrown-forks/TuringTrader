@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0-windows7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Platforms>x64</Platforms>
+        <Description>ngbrown Algorithms (V2)</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TuringTrader.Simulator\TuringTrader.Simulator.csproj" />
+    </ItemGroup>
+
+</Project>
