@@ -53,7 +53,7 @@ namespace TuringTrader.SimulatorV2
 
             // make sure we have a proper assembly name.
             // testhost uses 'TuringTrader'
-            var assyName = assy != null && assy.GetName().Name != "testhost"
+            var assyName = assy != null && (assy.GetName().Name != "testhost" && assy.GetName().Name != "ReSharperTestRunner")
                 ? assy.GetName().Name
                 : "TuringTrader";
 
