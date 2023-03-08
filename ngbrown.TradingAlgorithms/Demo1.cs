@@ -13,12 +13,16 @@ public class Demo1 : Algorithm
     [OptimizerParam(5, 40, 2)]
     public int FastFilterLength { get; set; } = 21;
 
+    protected virtual bool IS_TRADING_DAY
+        => IsFirstBar || (SimDate.DayOfWeek == DayOfWeek.Tuesday);
+
     public override void Run()
     {
         //---------- initialization
 
         StartDate = DateTime.Parse("2015-01-01T16:00-07:00");
         EndDate = DateTime.Parse("2016-12-31T16:00-07:00");
+        ((Account_Default)Account).Friction = AlgorithmConstants.FRICTION;
 
         // note that the warmup period is specified in calendar days
         // while most indicators express their parameters in trading days
@@ -31,15 +35,29 @@ public class Demo1 : Algorithm
         var slow = asset.Close.EMA(SlowFilterLength);
         var fast = asset.Close.EMA(FastFilterLength);
         var benchmark = Asset(MarketIndex.SPX);
-        var fredUnrate = Asset("FRED:UNRATE");
+        var fredUnrate = Asset(FredEconomicData.UNEMPLOYMENT);
 
         SimLoop(() =>
         {
-            asset.Allocate(
-                // hold the asset while the fast MA is above the slow MA,
-                fast[0] > slow[0] ? 1.0 : 0.0,
-                // we set the order to fill on tomorrow's open
-                OrderType.openNextBar);
+            if (IS_TRADING_DAY)
+            {
+                var isHolding = asset.Position > 0.1;
+                if (isHolding && asset[-5].Open < (asset[-1].Open / (1 + AlgorithmConstants.FRICTION)))
+                {
+                    asset.Allocate(
+                        0.0,
+                        // we set the order to fill on tomorrow's open
+                        OrderType.openNextBar);
+                }
+                else if (!isHolding && asset[-5].Open > (asset[-1].Open * (1 + AlgorithmConstants.FRICTION)))
+                {
+                    // hold the asset
+                    asset.Allocate(
+                        1.0,
+                        // we set the order to fill on tomorrow's open
+                        OrderType.openNextBar);
+                }
+            }
 
             if (!IsOptimizing && !IsDataSource && SimDate >= StartDate)
             {
