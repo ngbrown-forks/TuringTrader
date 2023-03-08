@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 
@@ -12,6 +13,134 @@ public static partial class DataSource
     private static string _fmpApiToken => Simulator.GlobalSettings.FmpApiKey;
     private static string _fmpConvertTicker(string ticker) => ticker;
     #endregion
+
+    private class _fmpUniverse
+    {
+        private Algorithm _algorithm;
+        private string _universe;
+        private readonly List<JObject> changes;
+        private readonly List<JObject> mostRecent;
+
+        public _fmpUniverse(Algorithm algo, string universe)
+        {
+            _algorithm = algo;
+            _universe = universe;
+
+                        string constituent;
+            switch (_universe.ToUpperInvariant())
+            {
+                case "$SPX":
+                    constituent = "sp500";
+                    break;
+                case "$DJU":
+                    constituent = "dowjones";
+                    break;
+                default:
+                    throw new InvalidOperationException($"Unknown universe: {_universe}");
+            }
+
+            var info = new Dictionary<DataSourceParam, string>
+            {
+                { DataSourceParam.nickName, "fmp:" + _universe },
+                { DataSourceParam.nickName2, _universe.ToUpperInvariant() },
+                { DataSourceParam.dataFeed, "fmp" }
+            };
+
+            this.mostRecent = _loadCacheHelper<JArray, List<JObject>>(_algorithm, info,
+                () =>
+                {
+                    // retrieve list from Financial Modeling Prep
+                    string url = string.Format("https://financialmodelingprep.com/api/v3/{0}_constituent?apikey={1}",
+                        constituent,
+                        _fmpApiToken);
+
+                    using (var client = new HttpClient())
+                        return client.GetStringAsync(url).Result;
+                },
+                (raw) =>
+                {
+                    // parse data and check validity
+                    try
+                    {
+                        if (raw == null || raw.Length < 10)
+                            return null;
+
+                        var json = JArray.Parse(raw);
+                        var data = ((JObject)json.First);
+
+                        if (data == null || !data.HasValues || data["symbol"].Type == JTokenType.Null)
+                            return null;
+
+                        // this seems to be valid meta data
+                        return json;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                },
+                (jsonData) =>
+                {
+                    return jsonData.Select(x => (JObject)x).ToList();
+                },
+                $"universe_{constituent}");
+
+            this.changes = _loadCacheHelper<JArray, List<JObject>>(_algorithm, info,
+                () =>
+                {
+                    // retrieve changes from Financial Modeling Prep
+                    string url = string.Format("https://financialmodelingprep.com/api/v3/historical/{0}_constituent?apikey={1}",
+                        constituent,
+                        _fmpApiToken);
+
+                    using (var client = new HttpClient())
+                        return client.GetStringAsync(url).Result;
+                },
+                (raw) =>
+                {
+                    // parse data and check validity
+                    try
+                    {
+                        if (raw == null || raw.Length < 10)
+                            return null;
+
+                        var json = JArray.Parse(raw);
+                        var data = ((JObject)json.First);
+
+                        if (data == null || !data.HasValues || data["reason"].Type == JTokenType.Null)
+                            return null;
+
+                        // this seems to be valid meta data
+                        return json;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                },
+                (jsonData) =>
+                {
+                    return jsonData.Select(x => (JObject)x).ToList();
+                },
+                $"universe_{constituent}_historical");
+
+            // TODO: walk back through the history and re-construct the state on any given day
+        }
+
+        public HashSet<string> Constituents()
+        {
+            var localClose = _algorithm.SimDate;
+            var exchangeTime = TimeZoneInfo.ConvertTime(localClose, _algorithm.TradingCalendar.ExchangeTimeZone);
+
+            var constituents = new HashSet<string>();
+            foreach (var obj in this.mostRecent)
+            {
+                var symbol = (string)obj["symbol"];
+                constituents.Add("fmp:" + symbol);
+            }
+            return constituents;
+        }
+    }
 
     private static List<BarType<OHLCV>> FmpLoadData(Algorithm algo, Dictionary<DataSourceParam, string> info) =>
         _loadDataHelper<JObject>(
@@ -92,7 +221,7 @@ public static partial class DataSource
         _loadMetaHelper<JArray>(
             algo, info,
             () =>
-            {   // retrieve meta from Tiingo
+            {   // retrieve meta from Financial Modeling Prep
                 string url = string.Format("https://financialmodelingprep.com/api/v3/profile/{0}?apikey={1}",
                     _fmpConvertTicker(info[DataSourceParam.symbolFmp]),
                     _fmpApiToken);
@@ -137,5 +266,14 @@ public static partial class DataSource
         return Tuple.Create(
             FmpLoadData(owner, info),
             FmpLoadMeta(owner, info));
+    }
+
+    private static HashSet<string> FmpGetUniverse(Algorithm owner, string universe)
+    {
+        var theUniverse = owner.ObjectCache.Fetch(
+            string.Format("Universe({0})", universe),
+            () => new _fmpUniverse(owner, universe));
+
+        return theUniverse.Constituents();
     }
 }

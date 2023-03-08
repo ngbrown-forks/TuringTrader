@@ -641,12 +641,40 @@ namespace TuringTrader.SimulatorV2
             Func<T, TimeSeriesAsset.MetaType> extractMeta
         ) where T : class
         {
+            return _loadCacheHelper<T, TimeSeriesAsset.MetaType>(owner, info, getMeta, parseMeta, extractMeta, "meta");
+        }
+
+        /// <summary>
+        /// Helper function to load, parse, and extract data through a disk cache.
+        /// This helper is used for the web-based data sources, namely FRED, Yahoo, and Tiingo.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TR"></typeparam>
+        /// <param name="owner"></param>
+        /// <param name="info"></param>
+        /// <param name="getMeta"></param>
+        /// <param name="parseMeta"></param>
+        /// <param name="extractMeta"></param>
+        /// <param name="cacheName"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static TR _loadCacheHelper<T, TR>(
+            Algorithm owner,
+            Dictionary<DataSourceParam, string> info,
+            Func<string> getMeta,
+            Func<string, T> parseMeta,
+            Func<T, TR> extractMeta,
+            string cacheName
+        )
+            where T : class
+            where TR : class
+        {
             try
             {
                 lock (_lockGetMeta)
                 {
                     string cachePath = Path.Combine(Simulator.GlobalSettings.HomePath, "Cache", info[DataSourceParam.nickName2]);
-                    string metaCache = Path.Combine(cachePath, info[DataSourceParam.dataFeed] + "_meta");
+                    string metaCache = Path.Combine(cachePath, info[DataSourceParam.dataFeed] + "_" + cacheName);
 
                     bool writeToDisk = false;
                     string rawMeta = null;
@@ -774,6 +802,9 @@ namespace TuringTrader.SimulatorV2
             {
                 case "norgate":
                     return NorgateGetUniverse(algo, universe);
+
+                case "fmp":
+                    return FmpGetUniverse(algo, universe);
 
                 default:
                     return StaticGetUniverse(algo, universe, datafeed);

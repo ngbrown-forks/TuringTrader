@@ -1,6 +1,8 @@
 ﻿#region libraries
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #endregion
 
@@ -63,5 +65,43 @@ public class T210_Fmp
             Assert.IsTrue(Math.Abs(algo.LastClose / algo.FirstOpen - 98.48418 / 95.37062) < 1e-3);
             Assert.IsTrue(Math.Abs(algo.HighestHigh / algo.LowestLow - 100.47684 / 93.11927) < 1e-3);
         }
+    }
+
+    private class Testbed2 : Algorithm
+    {
+        public TimeSeriesAsset TestResult;
+        public override void Run()
+        {
+            StartDate = DateTime.Parse("1990-01-01T16:00-05:00");
+            EndDate = DateTime.Parse("2021-12-31T16:00-05:00");
+            WarmupPeriod = TimeSpan.FromDays(0);
+
+            var allTickers = new HashSet<string>();
+
+            SimLoop(() =>
+            {
+                var constituents = Universe("$SPX");
+
+                foreach (var constituent in constituents)
+                    if (!allTickers.Contains(constituent))
+                        allTickers.Add(constituent);
+
+                return new OHLCV(constituents.Count, allTickers.Count, 0.0, 0.0, 0.0);
+            });
+        }
+    }
+
+    [TestMethod]
+    public void Test_Universe()
+    {
+        var algo = new Testbed2();
+        algo.Run();
+        var result = algo.EquityCurve;
+
+        var avgTickers = result.Average(b => b.Value.Open);
+        Assert.IsTrue(Math.Abs(avgTickers - 500.93551587301585) < 1e-3);
+
+        var totTickers = result.Max(b => b.Value.High);
+        Assert.IsTrue(Math.Abs(totTickers - 1232.0) < 1e-3);
     }
 }
