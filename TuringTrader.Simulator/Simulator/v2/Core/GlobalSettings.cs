@@ -299,6 +299,24 @@ namespace TuringTrader.SimulatorV2
             }
         }
         #endregion
+        #region FmpApiKey
+        /// <summary>
+        ///  Financial Modeling Prep API key
+        /// </summary>
+        static public string FmpApiKey
+        {
+            get
+            {
+                object value = GetRegistryValue("SimulatorEngine", "FmpApiKey");
+                if (value == null) return "";
+                return value.ToString();
+            }
+            set
+            {
+                SetRegistryValue("SimulatorEngine", "FmpApiKey", value);
+            }
+        }
+        #endregion
         #region QuandlApiKey
         /// <summary>
         ///  Tiingo API key

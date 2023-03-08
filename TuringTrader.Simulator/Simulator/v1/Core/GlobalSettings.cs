@@ -134,6 +134,15 @@ namespace TuringTrader.Simulator
         }
 
         /// <summary>
+        ///  Financial Modeling Prep API key
+        /// </summary>
+        static public string FmpApiKey
+        {
+            get => SimulatorV2.GlobalSettings.FmpApiKey;
+            set => SimulatorV2.GlobalSettings.FmpApiKey = value;
+        }
+
+        /// <summary>
         ///  Quandl API key
         /// </summary>
         static public string QuandlApiKey

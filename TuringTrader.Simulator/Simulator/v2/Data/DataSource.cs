@@ -32,6 +32,7 @@
 #define ENABLE_FRED
 #define ENABLE_CSV
 #define ENABLE_YAHOO
+#define ENABLE_FMP
 #define ENABLE_STOOQ
 #define ENABLE_ALGO
 #define ENABLE_SPLICE
@@ -209,6 +210,10 @@ namespace TuringTrader.SimulatorV2
             /// </summary>
             symbolTiingo,
             /// <summary>
+            /// symbol for Financial Modeling Prep
+            /// </summary>
+            symbolFmp,
+            /// <summary>
             /// data feed to use
             /// </summary>
             dataFeed,
@@ -364,6 +369,7 @@ namespace TuringTrader.SimulatorV2
             info = _fillInIfMissing(info, DataSourceParam.symbolNorgate, info[DataSourceParam.ticker]);
             info = _fillInIfMissing(info, DataSourceParam.symbolFred, info[DataSourceParam.ticker]);
             info = _fillInIfMissing(info, DataSourceParam.symbolTiingo, info[DataSourceParam.ticker]);
+            info = _fillInIfMissing(info, DataSourceParam.symbolFmp, info[DataSourceParam.ticker]);
 
             // imply datafeed=csv, if parsing info is found
             if (info.ContainsKey(DataSourceParam.date)
@@ -421,6 +427,9 @@ namespace TuringTrader.SimulatorV2
 #endif
 #if ENABLE_YAHOO
                 Tuple.Create("yahoo", (Action)null, YahooGetAsset),
+#endif
+#if ENABLE_FMP
+                Tuple.Create("fmp", (Action)null, FmpGetAsset),
 #endif
 #if ENABLE_STOOQ
                 Tuple.Create("stooq", (Action)null, StooqGetAsset),

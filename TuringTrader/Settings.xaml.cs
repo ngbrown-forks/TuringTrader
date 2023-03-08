@@ -52,6 +52,11 @@ namespace TuringTrader
             get => GlobalSettings.TiingoApiKey;
             set => GlobalSettings.TiingoApiKey = value;
         }
+        public string FmpApiKey
+        {
+            get => GlobalSettings.FmpApiKey;
+            set => GlobalSettings.FmpApiKey = value;
+        }
 
         public string DefaultDataSource
         {

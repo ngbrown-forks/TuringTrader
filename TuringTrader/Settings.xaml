@@ -26,14 +26,17 @@
             <TabItem Header="Data Feeds">
                 <Grid Background="#FFE5E5E5">
                     <Label Content="Default Data Feed:" HorizontalAlignment ="Left" VerticalAlignment="top" Margin="10,10,0,0"/>
-                    <ComboBox Margin="180,12,10,0" VerticalAlignment="Top" Text="{Binding DefaultDataSource}">
-                        <ComboBoxItem>Yahoo</ComboBoxItem>
-                        <ComboBoxItem>Tiingo</ComboBoxItem>
-                        <ComboBoxItem>Norgate</ComboBoxItem>
-                        <ComboBoxItem>FRED</ComboBoxItem>
+                    <ComboBox Margin="180,12,10,0" VerticalAlignment="Top" SelectedValuePath="Tag" SelectedValue="{Binding DefaultDataSource}">
+                        <ComboBoxItem Tag="yahoo">Yahoo</ComboBoxItem>
+                        <ComboBoxItem Tag="tiingo">Tiingo</ComboBoxItem>
+                        <ComboBoxItem Tag="norgate">Norgate</ComboBoxItem>
+                        <ComboBoxItem Tag="fmp">Financial Modeling Prep</ComboBoxItem>
+                        <ComboBoxItem Tag="fred">FRED</ComboBoxItem>
                     </ComboBox>
                     <Label Content="Tiingo API Key:" HorizontalAlignment ="Left" VerticalAlignment="top" Margin="10,41,0,0" RenderTransformOrigin="0.455,-0.285"/>
                     <TextBox Name="TextTiingoApiKey" Height="23" Margin="180,45,10,0" TextWrapping="Wrap" Text="{Binding TiingoApiKey}" VerticalAlignment="Top"/>
+                    <Label Content="Financial Modeling API Key:" HorizontalAlignment ="Left" VerticalAlignment="top" Margin="10,72,0,0" RenderTransformOrigin="0.455,-0.285"/>
+                    <TextBox Name="TextFmpApiKey" Height="23" Margin="180,76,10,0" TextWrapping="Wrap" Text="{Binding FmpApiKey}" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Report Output">
