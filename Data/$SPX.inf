@@ -2,3 +2,4 @@ name=S&P 500 Index
 symbolYahoo=^GSPC
 symbolTiingo=yahoo:^GSPC
 symbolFred=yahoo:^GSPC
+symbolFmp=^GSPC

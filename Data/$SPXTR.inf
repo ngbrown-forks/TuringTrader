@@ -2,3 +2,4 @@ name=S&P 500 Total Return Index
 symbolYahoo=^SP500TR
 symbolTiingo=yahoo:^SP500TR
 symbolFred=yahoo:^SP500TR
+symbolFmp=^SP500TR

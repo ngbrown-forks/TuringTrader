@@ -2,3 +2,4 @@ name=Dow Jones Utility Average
 symbolYahoo=^DJU
 symbolTiingo=yahoo:^DJU
 symbolFred=yahoo:^DJU
+symbolFmp=^DJU
