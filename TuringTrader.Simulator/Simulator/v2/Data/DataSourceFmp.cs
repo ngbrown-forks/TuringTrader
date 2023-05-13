@@ -222,7 +222,7 @@ public static partial class DataSource
             algo, info,
             () =>
             {   // retrieve meta from Financial Modeling Prep
-                string url = string.Format("https://financialmodelingprep.com/api/v3/profile/{0}?apikey={1}",
+                string url = string.Format("https://financialmodelingprep.com/api/v3/quote/{0}?apikey={1}",
                     _fmpConvertTicker(info[DataSourceParam.symbolFmp]),
                     _fmpApiToken);
 
@@ -239,7 +239,7 @@ public static partial class DataSource
                     var json = JArray.Parse(raw);
                     var data = ((JObject)json.First);
 
-                    if (data == null || !data.HasValues || data["companyName"].Type == JTokenType.Null)
+                    if (data == null || !data.HasValues || data["name"].Type == JTokenType.Null)
                         return null;
 
                     // this seems to be valid meta data
@@ -257,7 +257,7 @@ public static partial class DataSource
                 {
                     // extract meta for TuringTrader
                     Ticker = (string)data["symbol"],
-                    Description = (string)data["companyName"],
+                    Description = (string)data["name"],
                 };
             });
 
